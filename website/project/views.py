@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from project.models import Table,Category
 from pprint import pprint
 
+
 # Create your views here.
 
 
@@ -19,8 +20,7 @@ from pprint import pprint
 
 def news(request):
     data_news = Table.objects.all()     #запрос в бд
-    data_category = Category.objects.all()
-    return render(request,template_name='project/main_page.html', context={'title':'сидит на сайте', 'data':data_news, 'categories':data_category})
+    return render(request,template_name='project/main_page.html', context={'title':'сидит на сайте', 'data':data_news})
 
 
 def categories(request,category_id):
