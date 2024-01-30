@@ -25,5 +25,4 @@ def news(request):
 
 def categories(request,category_id):
     data_categories = Table.objects.filter(category_id=category_id)
-    all_data_categories = Category.objects.all()
-    return render(request,template_name='project/categories.html', context={'title':'Категории', 'data':data_categories, 'categories':all_data_categories, 'current_category':category_id})
+    return render(request,template_name='project/categories.html', context={'title':'Категории', 'data':data_categories, 'current_category':category_id})
