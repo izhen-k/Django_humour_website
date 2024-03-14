@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from project.models import Table,Category
 from pprint import pprint
+from .forms import TableForm
 
 
 # Create your views here.
@@ -19,10 +20,27 @@ from pprint import pprint
 
 
 def news(request):
-    data_news = Table.objects.all()     #запрос в бд
+    data_news = Table.objects.filter(is_published=True)     #запрос в бд
     return render(request,template_name='project/main_page.html', context={'title':'сидит на сайте', 'data':data_news})
 
 
 def categories(request,category_id):
     data_categories = Table.objects.filter(category_id=category_id)
-    return render(request,template_name='project/categories.html', context={'title':'Категории', 'data':data_categories, 'current_category':category_id})
+    return render(request, template_name='project/categories.html', context={'title':'Категории', 'data': data_categories, 'current_category':category_id})
+
+def news_description(request, news_id):
+    # news_object = Table.objects.get(id=news_id)
+    news_object = get_object_or_404(Table, id=news_id)
+    return render(request, template_name='project/news_description.html', context={'news_object': news_object})
+
+
+def add_joke(request):
+    if request.method == 'POST':
+        form = TableForm(request.POST, request.FILES)
+        if form.is_valid():
+            # new_joke = Table.objects.create(**form.cleaned_data)
+            new_joke = form.save()
+            return redirect(new_joke)
+    elif request.method == 'GET':
+        form = TableForm()
+        return render(request, template_name='project/add_joke.html', context={'form': form})
