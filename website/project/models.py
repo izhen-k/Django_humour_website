@@ -1,6 +1,9 @@
 from django.db import models
 
 # Create your models here.
+from django.urls import reverse
+
+
 class Table(models.Model):
     class Meta:
         verbose_name = 'новость'
@@ -18,6 +21,9 @@ class Table(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('news_description', kwargs={'news_id':self.id})
+
 
 
 class Category(models.Model):
@@ -28,4 +34,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('categories', kwargs={'category_id':self.id})
+
 

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load category_tags %}
+
+{% block sidebar %}
+    <div class="col-md-3">
+        <div class="list-group">
+            {% get_categories as categories %}
+            {% for category in categories %}
+                <a href="{% url 'categories' category.id %}"
+                   class="list-group-item list-group-item-action">{{ category }}</a>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="col-md-9">
+        <div class="card mb-4">
+            {{ news_object.category.title }}
+            {{ news_object.created_at|date:'j.n.Y G:i:s'}}
+            {% if news_object.photo %}
+                <img src=" {{ news_object.photo.url }}" class="card-img-top" width="50">
+            {% else %}
+                <img src="https://w.forfun.com/fetch/56/5656d35727009cabea6ce79973a9702c.jpeg" class="card-img-top"
+                     width="50">
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ news_object.title }}</h5>
+                <p class="card-text">{{ news_object.content }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
