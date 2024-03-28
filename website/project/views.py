@@ -40,14 +40,32 @@ class News(ListView):
         context['title'] = 'Жопа'
         return context
 
+    def get_queryset(self):
+        return Table.objects.filter(is_published=True)
 
-def categories(request, category_id):
-    data_categories = Table.objects.filter(category_id=category_id)
-    return render(
-        request,
-        template_name='project/categories.html',
-        context={'title': 'Категории', 'data': data_categories, 'current_category': category_id}
-    )
+
+# def categories(request, category_id):
+#     data_categories = Table.objects.filter(category_id=category_id)
+#     return render(
+#         request,
+#         template_name='project/categories.html',
+#         context={'title': 'Категории', 'data': data_categories, 'current_category': category_id}
+#     )
+
+
+class Categories(ListView):
+    model = Table
+    template_name = 'project/categories.html'
+    context_object_name = 'data'
+
+    def get_queryset(self):
+        return Table.objects.filter(category_id=self.kwargs['category_id'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Category.objects.get(id=self.kwargs['category_id']).title
+        return context
+
 
 
 def news_description(request, news_id):
